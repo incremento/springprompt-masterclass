@@ -1,0 +1,37 @@
+{
+  "skill_name": "springprompt-masterclass",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm giving a 10 minute talk to about 40 people at a local founders meetup next week about what we learned from raising prices on our scheduling app. I don't have slides. Can you make them? I'd like people to be able to vote on things.",
+      "expected_output": "The agent interviews before building (asks a few questions at a time about the audience, the goal, the three to five points, real numbers and where the talk is given) and stops when it can write an outline. It shows an outline table with sentence headlines and proposes the interactions itself: a warm-up in the first two minutes, at least one guess-then-reveal or vote, questions kept open, and a take-home screen. It creates a talk folder with new_deck.py, writes 8 to 12 slides with speaker notes on each, runs server.py --check with no problems, takes screenshots, looks at them and fixes layout problems. It starts the server and hands over the Start here, Slides, Remote and Audience links, noting that the admin link is a secret.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Here's our quarterly review deck: quarterly-review.pptx. Turn it into one of those interactive decks with live polls and host it so the remote team can join from home on Thursday.",
+      "expected_output": "The agent imports the file with extract_pptx.py rather than retyping it, reads the outline, and asks only what the file cannot answer (who is watching, how long, what to ask the room, what people take home). It rebuilds the slides in the kit's layouts with sentence headlines, moves the original speaker notes into notes asides, turns figures into charts from charts.md, and proposes which slides become live questions. Because the audience is remote, it chooses a public address (Railway or --tunnel, explaining the difference) and not the same-wifi option, sets ROOM_KEY and ADMIN_KEY for a deployed room, and verifies the join link from outside the local network or with simulate.py.",
+      "files": [
+        "evals/files/quarterly-review.pptx"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Just make something. 5 minute lightning talk, topic: why sourdough starters die. I'm on in an hour at a food meetup, the wifi there is terrible.",
+      "expected_output": "The agent does not run a long interview. It states its assumptions, builds a short deck (about five or six slides) with one or two interactions at most and questions open, checks and screenshots it, and exports a PDF backup. For hosting it picks an option that survives bad venue wifi: a public link (tunnel from a tethered laptop, or a deploy) so phones can use mobile data, and it says what to do if the room cannot connect (show of hands, the remote's manual counts, the PDF).",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Add a slide to my deck (talk/deck.html) showing monthly signups for the last 12 months for our three plans, and another where the audience guesses our churn rate before I show it. It's 3.2%.",
+      "expected_output": "The agent edits the existing deck and leaves kit/ alone. The signups slide uses a line chart from kit/charts.js with three named series, a sentence headline that states the finding, alt text and a source line. The churn slide uses a scale interaction with min, max and step chosen so 3.2 is not at an edge, the answer kept in the room block with an answerLabel, data-phase and data-live on the slide and a data-go=\"reveal\" click-reveal. Both slides get speaker notes. It runs --check and looks at screenshots of the two slides.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "The talk went well in rehearsal but on my phone the remote says the slides aren't connected, and my colleague's phone couldn't open the join link at all. We're running it with python3 kit/server.py on my laptop.",
+      "expected_output": "The agent diagnoses rather than rebuilding: the remote's grey dot means the slides tab is not open through the server with the admin link (or is asleep); the colleague's phone cannot reach a laptop address unless it is on the same network and the network lets devices talk to each other. It recommends restarting with --tunnel or deploying, explains that the tunnel link changes on each restart, and has the speaker test the join code from a phone on mobile data.",
+      "files": []
+    }
+  ]
+}

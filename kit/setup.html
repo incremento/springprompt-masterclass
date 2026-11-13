@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Set up the room</title>
+<style>
+@font-face{font-family:Inter;src:url(/kit/inter.woff2) format("woff2");font-weight:100 900;font-display:swap}
+:root{--bg:#FAF7F0;--panel:#fff;--line:#E2DCCD;--ink:#1C2420;--mute:#4A544F;--faint:#7A827D;--accent:#3E7A4F;--soft:#C4E8A4;--warm:#C9822B;--bad:#B4472F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,-apple-system,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:1040px;margin:0 auto;padding:36px 24px 60px}
+h1{font-size:34px;letter-spacing:-.03em;margin:0 0 4px;font-weight:650}
+.sub{color:var(--mute);margin:0 0 26px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.card h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0;font-weight:700}
+.card h3{font-size:21px;letter-spacing:-.02em;margin:0;font-weight:650}
+.card p{margin:0;color:var(--mute);font-size:14.5px}
+.qr{width:100%;max-width:230px;aspect-ratio:1;margin:6px auto;padding:10px;background:#fff;border-radius:12px;border:1px solid var(--line)}
+.qr svg{width:100%;height:100%;display:block}
+.link{display:flex;gap:8px;margin-top:auto}
+.link input{flex:1;min-width:0;font:12.5px/1 ui-monospace,Menlo,monospace;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--mute)}
+button,.go{font:inherit;font-weight:600;font-size:14px;border:0;border-radius:10px;padding:10px 14px;background:var(--ink);color:#fff;cursor:pointer;text-decoration:none;white-space:nowrap}
+.go{display:inline-block;background:var(--accent);font-size:16px;padding:13px 18px;text-align:center}
+.status{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:16px 0}
+@media(max-width:860px){.status{grid-template-columns:1fr 1fr}}
+.status div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.status b{display:block;font-size:22px;letter-spacing:-.02em}
+.status span{font-size:13px;color:var(--faint)}
+.ok{color:var(--accent)}.no{color:var(--warm)}
+#problems{background:#FBEDE8;border:1px solid #E9C3B8;color:#7A2B19;border-radius:14px;padding:14px 18px;margin:16px 0;display:none}
+#problems ul{margin:6px 0 0;padding-left:20px}
+#local{background:#FFF4DF;border:1px solid #EBD3A4;color:#6B4710;border-radius:14px;padding:14px 18px;margin:0 0 16px;display:none;font-size:14.5px}
+ol{color:var(--mute);padding-left:22px;margin:8px 0 0}ol li{margin-bottom:6px}
+h4{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:34px 0 0}
+table{border-collapse:collapse;width:100%;margin-top:10px;font-size:14.5px}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}td:first-child{font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:nowrap}td:nth-child(2){color:var(--faint);white-space:nowrap}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Set up the room</h1>
+  <p class="sub">Three links run the whole talk. This page is for you only: it contains the presenter key.</p>
+  <div id="local"></div>
+  <div id="problems"></div>
+  <div class="grid">
+    <div class="card"><h2>1 · Laptop</h2><h3>Slides</h3><p>Open on the machine plugged into the screen, then press <b>F</b> for full screen.</p><a class="go" id="deck" href="/deck" target="_blank" rel="noopener">Open the slides</a><p style="font-size:13px">Keys: → next · ← back · N notes · Q join QR · B blank · ? help</p></div>
+    <div class="card"><h2>2 · Your phone</h2><h3>Remote</h3><p>Scan with your own phone. Do not show this code to the room.</p><div class="qr" id="qr-remote"></div><div class="link"><input id="remote" readonly><button data-copy="remote">Copy</button></div></div>
+    <div class="card"><h2>3 · The room</h2><h3>Audience</h3><p>The slides show this code on the join slide. It is here for testing with your own phone.</p><div class="qr" id="qr-join"></div><div class="link"><input id="join" readonly><button data-copy="join">Copy</button></div></div>
+  </div>
+  <div class="status">
+    <div><b id="s-deck">–</b><span>slides</span></div>
+    <div><b id="s-online">0</b><span>phones connected now</span></div>
+    <div><b id="s-joined">0</b><span>joined in total</span></div>
+    <div><b id="s-phase">–</b><span>phones are showing</span></div>
+  </div>
+  <h4>Before people arrive</h4>
+  <ol>
+    <li>Open the slides on the laptop and the remote on your phone. The dot at the top left of the remote turns green.</li>
+    <li>Scan the audience code with a second phone (or a private tab) and step through each live slide. Answer once to see the result draw on the slide.</li>
+    <li>On the remote: <b>More → New session</b> clears the test answers.</li>
+    <li>Keep the laptop awake and on mains power. If the venue wifi blocks devices from seeing each other, use a public link (see the hosting notes in the skill).</li>
+  </ol>
+  <h4>What the room will be asked</h4>
+  <table id="its"></table>
+</main>
+<script src="/kit/qr.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function qr(el, url) {
+    if (el._url === url) return; el._url = url;
+    try { const q = qrcode(0, 'M'); q.addData(url); q.make(); el.innerHTML = q.createSvgTag({ cellSize: 8, margin: 0, scalable: true }); } catch (e) { el.textContent = url; }
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-copy]'); if (!b) return;
+    const i = $('#' + b.dataset.copy); i.select();
+    (navigator.clipboard ? navigator.clipboard.writeText(i.value) : Promise.reject()).catch(() => document.execCommand('copy'));
+    b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy'; }, 1200);
+  });
+  async function tick() {
+    try {
+      const r = await fetch('/api/info', { cache: 'no-store' }); if (!r.ok) throw 0;
+      const d = await r.json();
+      $('#title').textContent = d.title ? 'Set up: ' + d.title : 'Set up the room';
+      document.title = 'Setup · ' + (d.title || 'deck');
+      $('#remote').value = d.remote; $('#join').value = d.join;
+      qr($('#qr-remote'), d.remote); qr($('#qr-join'), d.join);
+      $('#s-deck').textContent = d.deckSeen ? 'open' : 'not open yet'; $('#s-deck').className = d.deckSeen ? 'ok' : 'no';
+      $('#s-online').textContent = d.online; $('#s-joined').textContent = d.joined;
+      $('#s-phase').textContent = d.phase === 'wait' ? 'waiting screen' : d.phase;
+      const p = $('#problems');
+      p.style.display = d.problems.length ? 'block' : 'none';
+      p.innerHTML = '<b>Fix these in the deck’s room block:</b><ul>' + d.problems.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>';
+      const host = new URL(d.join).hostname, l = $('#local');
+      const lonely = host === 'localhost' || host === '127.0.0.1';
+      const lan = /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host);
+      l.style.display = lonely || lan ? 'block' : 'none';
+      l.innerHTML = lonely ? '<b>Only this computer can reach these links.</b> Phones need an address they can open: start the server with a public link or on the same wifi.'
+        : lan ? '<b>These links work on this wifi only</b> (' + esc(host) + '). Everyone in the room must be on the same network, and some guest networks block this. For anything else, use a public link.' : '';
+      $('#its').innerHTML = d.interactions.map(x => `<tr><td>${esc(x.id)}</td><td>${esc(x.type)}</td><td>${esc(x.prompt)}</td></tr>`).join('') +
+        (d.takehome ? '<tr><td>takehome</td><td>links</td><td>Sent to phones at the end</td></tr>' : '') || '<tr><td colspan="3">No interactions yet.</td></tr>';
+    } catch (e) {}
+    setTimeout(tick, 2500);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>

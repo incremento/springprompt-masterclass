@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FAF7F0">
+<meta name="robots" content="noindex">
+<title>Join in</title>
+<style>
+:root{--bg:#FAF7F0;--paper:#F1ECE0;--panel:#fff;--line:#E2DCCD;--ink:#1C2420;--mute:#4A544F;--faint:#7A827D;--accent:#3E7A4F;--accent-soft:#C4E8A4;--bad:#B4472F;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:17px/1.4 -apple-system,"Segoe UI",system-ui,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body{padding:max(18px,env(safe-area-inset-top)) 18px max(28px,env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:26px}
+header i{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;transition:background .3s}
+header.off i{background:var(--bad)}
+h1{font-size:28px;line-height:1.14;letter-spacing:-.03em;margin:0 0 10px;text-wrap:balance}
+p{margin:0 0 14px;color:var(--mute)}
+main{animation:in .5s var(--ease) both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.hint{font-size:15px;color:var(--faint);margin:10px 0 0}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:16px;margin-bottom:10px;font-size:18px;line-height:1.3;transition:border-color .15s,background .15s,transform .1s}
+.opt:active{transform:scale(.985)}
+.opt b{flex:none;width:34px;height:34px;border-radius:50%;background:var(--paper);font-size:15px;line-height:34px;text-align:center;color:var(--mute);transition:background .15s,color .15s}
+.opt.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent-soft) 40%,#fff)}
+.opt.on b{background:var(--accent);color:#fff}
+.opt.none{background:none;border-style:dashed;color:var(--mute);font-size:16px}
+.opt img{width:64px;height:64px;object-fit:cover;border-radius:10px;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px}
+.chip{border:1.5px solid var(--line);background:var(--panel);border-radius:99px;padding:9px 14px;font-size:15px}
+.chip.on{border-color:var(--accent);background:var(--accent);color:#fff}
+.go{display:block;width:100%;background:var(--accent);color:#fff;font-weight:650;font-size:18px;border-radius:16px;padding:17px;margin-top:14px;transition:opacity .2s,transform .1s}
+.go:active{transform:scale(.985)}
+.go[disabled]{opacity:.35}
+.go.ghost{background:none;color:var(--accent);border:1.5px solid var(--line);font-weight:600}
+.sent{display:flex;align-items:center;gap:12px;background:color-mix(in srgb,var(--accent-soft) 45%,#fff);border-radius:16px;padding:16px;font-weight:600;margin:16px 0 4px}
+.sent::before{content:"✓";width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;line-height:30px;flex:none}
+.big{font-size:64px;font-weight:650;letter-spacing:-.04em;text-align:center;margin:18px 0 6px;font-variant-numeric:tabular-nums}
+.slider{display:grid;grid-template-columns:52px 1fr 52px;gap:12px;align-items:center}
+.slider button{height:52px;border-radius:50%;background:var(--panel);border:1.5px solid var(--line);font-size:24px}
+input[type=range]{width:100%;accent-color:var(--accent);height:44px}
+.ends{display:flex;justify-content:space-between;font-size:14px;color:var(--faint);padding:0 64px}
+input[type=text],textarea{width:100%;font:inherit;font-size:18px;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:15px;margin-bottom:10px;outline:none;resize:none}
+input[type=text]:focus,textarea:focus{border-color:var(--accent)}
+.qs{margin-top:22px;display:grid;gap:8px}
+.qrow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 12px 12px 16px;font-size:16px}
+.qrow.done{opacity:.5}
+.up{min-width:52px;height:44px;border-radius:12px;border:1.5px solid var(--line);font-weight:650;font-variant-numeric:tabular-nums}
+.up.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.label{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:26px 0 10px}
+.bars{margin-top:18px;display:grid;gap:8px}
+.bar{font-size:15px}.bar span{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
+.bar i{display:block;height:10px;border-radius:0 5px 5px 0;background:color-mix(in srgb,var(--faint) 50%,var(--bg));min-width:2px;transition:width .6s var(--ease)}
+.bar.me i{background:var(--accent)}
+/* swipe */
+.stack{position:relative;height:min(58vh,440px);margin:18px 0 12px}
+.cardx{position:absolute;inset:0;background:var(--panel);border:1.5px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;box-shadow:0 18px 40px -26px #1c24203d;touch-action:pan-y;user-select:none;-webkit-user-select:none;will-change:transform}
+.cardx h2{font-size:24px;line-height:1.2;letter-spacing:-.02em;margin:0 0 8px}
+.cardx p{font-size:17px;margin:0}
+.cardx img{width:100%;max-height:55%;object-fit:cover;border-radius:14px;margin-bottom:16px;pointer-events:none}
+.cardx .stamp{position:absolute;top:18px;padding:6px 12px;border-radius:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:0;border:3px solid}
+.stamp.y{left:18px;color:var(--accent);transform:rotate(-8deg)}.stamp.n{right:18px;color:var(--bad);transform:rotate(8deg)}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.yn button{border-radius:16px;padding:16px;font-weight:650;font-size:17px;border:1.5px solid var(--line);background:var(--panel)}
+.yn .y{background:var(--accent);border-color:var(--accent);color:#fff}
+.count{text-align:center;font-size:14px;color:var(--faint);margin-top:10px}
+/* take-home */
+.link{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:16px;margin-bottom:10px;color:var(--ink);text-decoration:none;font-weight:600}
+.link::after{content:"→";color:var(--accent)}
+.copy{background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.copy b{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.copy button{color:var(--accent);font-weight:650;font-size:15px;padding:6px 0 6px 10px}
+.copy pre{margin:0;white-space:pre-wrap;font:13.5px/1.45 ui-monospace,Menlo,monospace;color:var(--mute);max-height:150px;overflow:auto}
+.pulse{display:flex;gap:6px;margin-top:26px}
+.pulse i{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:p 1.4s ease-in-out infinite}
+.pulse i:nth-child(2){animation-delay:.2s}.pulse i:nth-child(3){animation-delay:.4s}
+@keyframes p{0%,100%{opacity:.2}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header id="top"><span id="talk">Connecting…</span><i></i></header>
+<main id="main"></main>
+<script>
+(function () {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const K = new URLSearchParams(location.search).get('k') || '';
+  const main = $('#main'), top = $('#top');
+  let voter;
+  try { voter = localStorage.getItem('mc_voter'); } catch (e) {}
+  if (!/^[a-z0-9]{6,32}$/.test(voter || '')) {
+    voter = Array.from(crypto.getRandomValues(new Uint8Array(10)), b => (b % 36).toString(36)).join('');
+    try { localStorage.setItem('mc_voter', voter); } catch (e) {}
+  }
+
+  let view = null, key = '', fails = 0, timer = 0, draft = null, editing = false, busy = false, lastSig = '';
+
+  async function call(path, body) {
+    const url = '/api/' + path + (path.includes('?') ? '&' : '?') + 'k=' + encodeURIComponent(K);
+    const r = await fetch(url, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ voter }, body)) } : { cache: 'no-store' });
+    if (!r.ok) throw Object.assign(new Error(r.status), { status: r.status });
+    return r.json();
+  }
+  async function poll() {
+    clearTimeout(timer);
+    try {
+      apply(await call('room?v=' + voter));
+      fails = 0; top.classList.remove('off');
+    } catch (e) {
+      if (e.status === 403) { main.innerHTML = '<h1>This link has expired</h1><p>Scan the QR code on the screen again.</p>'; return; }
+      if (++fails > 1) top.classList.add('off');
+    }
+    timer = setTimeout(poll, (document.hidden ? 6000 : 1900) + Math.random() * 400);
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+  addEventListener('online', poll);
+  addEventListener('pageshow', poll);
+
+  async function send(path, body) {
+    if (busy) return;
+    busy = true;
+    try { apply(await call(path, body), true); }
+    catch (e) { toast(e.status === 409 ? 'That one has just closed.' : 'Could not send. Trying again helps.'); }
+    busy = false;
+  }
+  function toast(t) { const h = $('.hint'); if (h) h.textContent = t; }
+
+  /* A new screen is built only when the phase, round or interaction changes,
+     so polling never wipes something half typed. Everything else updates in place. */
+  function apply(v, fromSend) {
+    view = v;
+    $('#talk').textContent = v.title || 'Live';
+    const th = v.theme || {}, rs = document.documentElement.style;
+    if (th.accent) rs.setProperty('--accent', th.accent);
+    if (th.soft) rs.setProperty('--accent-soft', th.soft);
+    if (v.theme && v.theme.accent) document.documentElement.style.setProperty('--accent', v.theme.accent);
+    if (v.theme && v.theme.soft) document.documentElement.style.setProperty('--accent-soft', v.theme.soft);
+    const it = v.it || v.ask;
+    const k = [v.phase, v.round, it ? it.id : ''].join(':');
+    if (k !== key) { key = k; draft = null; editing = false; build(); }
+    else update(fromSend);
+  }
+
+  const SCREENS = {};
+  function build() {
+    const v = view, it = v.it;
+    main.style.animation = 'none'; void main.offsetWidth; main.style.animation = '';
+    main.onclick = main.oninput = main.onkeydown = null; lastSig = '';
+    if (v.phase === 'takehome') return SCREENS.takehome(v.takehome || {});
+    if (it && SCREENS[it.type]) return SCREENS[it.type](it);
+    SCREENS.wait();
+  }
+  function update(fromSend) {
+    const v = view, it = v.it;
+    if (v.phase === 'takehome') return;
+    if (it && it.type !== 'questions') {
+      const sig = JSON.stringify([v.mine, v.results]);
+      if (fromSend || (!editing && sig !== lastSig)) { lastSig = sig; SCREENS[it.type](it); }   // reflect the stored answer
+      return;
+    }
+    paintQuestions();
+  }
+
+  SCREENS.wait = () => {
+    const ask = view.ask;
+    main.innerHTML = `<h1>You’re in.</h1><p>Keep this page open. When there is something to vote on, it appears here by itself.</p><div class="pulse"><i></i><i></i><i></i></div>` + (ask ? askBox(ask) : '');
+    if (ask) wireAsk(ask);
+  };
+
+  // ── choice ──────────────────────────────────────────────────────────
+  SCREENS.choice = it => {
+    const mine = view.mine;
+    if (!draft) draft = mine ? { picks: [...mine.picks], none: mine.none, reasons: [...(mine.reasons || [])] } : { picks: [], none: false, reasons: [] };
+    const quick = !it.multi && !(it.reasons || []).length;         // one tap sends
+    const sent = mine && !editing;
+    const letters = 'ABCDEFGH';
+    const images = it.images || [];
+    let h = `<h1>${esc(it.prompt)}</h1>` + (it.multi ? '<p>Pick as many as you like.</p>' : '');
+    h += it.options.map((o, k) => `<button class="opt ${draft.picks.includes(k) ? 'on' : ''}" data-k="${k}"><b>${letters[k]}</b>${images[k] ? `<img src="${esc(images[k])}" alt="">` : ''}<span>${esc(o)}</span></button>`).join('');
+    if (it.none) h += `<button class="opt none ${draft.none ? 'on' : ''}" data-k="none"><span>${esc(it.none)}</span></button>`;
+    if ((it.reasons || []).length && (draft.picks.length || draft.none)) h += `<div class="label">${esc(it.reasonsPrompt || 'Why? (optional)')}</div><div class="chips">${it.reasons.map((r, k) => `<button class="chip ${draft.reasons.includes(k) ? 'on' : ''}" data-r="${k}">${esc(r)}</button>`).join('')}</div>`;
+    if (sent) h += `<div class="sent">Sent. ${quick ? 'Tap another to change it.' : ''}</div>` + (quick ? '' : '<button class="go ghost" data-edit>Change my answer</button>');
+    else if (!quick) h += `<button class="go" data-send ${draft.picks.length || draft.none ? '' : 'disabled'}>Send</button>`;
+    h += '<p class="hint"></p>';
+    if (view.results) h += resultBars(it, view.results, mine);
+    main.innerHTML = h;
+    main.onclick = e => {
+      const o = e.target.closest('.opt'), c = e.target.closest('.chip');
+      if (o) {
+        if (sent && !quick) return;
+        editing = true;
+        if (o.dataset.k === 'none') { draft.none = !draft.none; draft.picks = []; }
+        else {
+          const k = +o.dataset.k; draft.none = false;
+          if (it.multi) draft.picks = draft.picks.includes(k) ? draft.picks.filter(x => x !== k) : [...draft.picks, k];
+          else draft.picks = [k];
+        }
+        if (quick) { editing = false; return send('answer', { id: it.id, value: draft }); }
+        SCREENS.choice(it);
+      } else if (c) {
+        if (sent) return;
+        const k = +c.dataset.r; editing = true;
+        draft.reasons = draft.reasons.includes(k) ? draft.reasons.filter(x => x !== k) : [...draft.reasons, k];
+        SCREENS.choice(it);
+      } else if (e.target.closest('[data-send]')) { editing = false; send('answer', { id: it.id, value: draft }); }
+      else if (e.target.closest('[data-edit]')) { editing = true; SCREENS.choice(it); }
+    };
+  };
+  function resultBars(it, r, mine) {
+    const max = Math.max(1, ...r.counts);
+    return `<div class="label">The room so far</div><div class="bars">${it.options.map((o, k) => `<div class="bar ${mine && mine.picks.includes(k) ? 'me' : ''}"><span><span>${esc(o)}</span><b>${r.counts[k]}</b></span><i style="width:${(100 * r.counts[k]) / max}%"></i></div>`).join('')}</div>`;
+  }
+
+  // ── scale ───────────────────────────────────────────────────────────
+  SCREENS.scale = it => {
+    const lo = it.min || 0, hi = it.max == null ? 100 : it.max, step = it.step || 1;
+    const fmt = v => (it.prefix || '') + (+v).toLocaleString('en-US') + (it.unit || '');
+    const mine = view.mine;
+    if (draft == null) draft = mine != null ? mine : (it.start != null ? it.start : Math.round((lo + hi) / 2 / step) * step);
+    const sent = mine != null && !editing;
+    main.innerHTML = `<h1>${esc(it.prompt)}</h1><div class="big" id="big">${fmt(draft)}</div>
+      <div class="slider"><button data-d="-1" aria-label="Less">−</button><input type="range" id="rng" min="${lo}" max="${hi}" step="${step}" value="${draft}" ${sent ? 'disabled' : ''}><button data-d="1" aria-label="More">+</button></div>
+      <div class="ends"><span>${fmt(lo)}</span><span>${fmt(hi)}</span></div>
+      ${sent ? '<div class="sent">Sent.</div><button class="go ghost" data-edit>Change my answer</button>' : '<button class="go" data-send>Send</button>'}<p class="hint"></p>`;
+    const rng = $('#rng');
+    const set = v => { draft = Math.max(lo, Math.min(hi, +v)); rng.value = draft; $('#big').textContent = fmt(draft); };
+    rng.oninput = () => { editing = true; set(rng.value); };
+    main.onclick = e => {
+      const d = e.target.closest('[data-d]');
+      if (d && !sent) { editing = true; set(draft + step * +d.dataset.d); }
+      else if (e.target.closest('[data-send]')) { editing = false; send('answer', { id: it.id, value: draft }); }
+      else if (e.target.closest('[data-edit]')) { editing = true; SCREENS.scale(it); }
+    };
+  };
+
+  // ── words ───────────────────────────────────────────────────────────
+  SCREENS.words = it => {
+    const n = it.max || 3, mine = view.mine;
+    if (!draft) draft = mine ? [...mine] : [];
+    const sent = mine && !editing;
+    main.oninput = main.onkeydown = null;
+    if (sent) {
+      main.innerHTML = `<h1>${esc(it.prompt)}</h1><div class="sent">Sent: ${esc(mine.join(', '))}</div><button class="go ghost" data-edit>Change my answer</button><p class="hint"></p>`;
+    } else {
+      main.innerHTML = `<h1>${esc(it.prompt)}</h1><p>${n > 1 ? `Up to ${n}. A word or two each.` : 'A word or two.'}</p>` +
+        Array.from({ length: n }, (_, k) => `<input type="text" maxlength="${it.maxlen || 24}" value="${esc(draft[k] || '')}" placeholder="${k ? 'Another (optional)' : 'Type here'}" autocapitalize="none" autocomplete="off" enterkeyhint="send">`).join('') +
+        '<button class="go" data-send>Send</button><p class="hint"></p>';
+      main.oninput = () => { editing = true; draft = [...main.querySelectorAll('input')].map(i => i.value); };
+      main.onkeydown = e => { if (e.key === 'Enter') $('[data-send]').click(); };
+    }
+    main.onclick = e => {
+      if (e.target.closest('[data-send]')) {
+        const words = (draft || []).map(w => w.trim()).filter(Boolean);
+        if (!words.length) return toast('Type at least one word.');
+        editing = false; send('answer', { id: it.id, value: words });
+      } else if (e.target.closest('[data-edit]')) { editing = true; SCREENS.words(it); }
+    };
+  };
+
+  // ── questions ───────────────────────────────────────────────────────
+  const askBox = it => `<div class="label">${esc(it.prompt || 'Ask a question')}</div><textarea id="qtext" rows="2" maxlength="${it.maxlen || 200}" placeholder="Type your question"></textarea><button class="go" data-ask>Send question</button><p class="hint"></p><div class="qs" id="qs"></div>`;
+  function wireAsk(it) {
+    main.oninput = null; main.onkeydown = null;
+    main.onclick = e => {
+      const up = e.target.closest('.up');
+      if (up) return send('upvote', { id: it.id, qid: up.dataset.q });
+      if (e.target.closest('[data-ask]')) {
+        const t = $('#qtext').value.trim();
+        if (!t) return;
+        $('#qtext').value = '';
+        send('ask', { id: it.id, text: t }).then(() => toast('Sent. Upvote the ones you want answered.'));
+      }
+    };
+    paintQuestions();
+  }
+  function paintQuestions() {
+    const box = $('#qs'); if (!box) return;
+    const qs = view.questions || [];
+    const sig = JSON.stringify(qs);
+    if (box._sig === sig) return; box._sig = sig;
+    box.innerHTML = qs.map(q => `<div class="qrow ${q.done ? 'done' : ''}"><span>${esc(q.text)}</span><button class="up ${q.voted ? 'on' : ''}" data-q="${q.id}" aria-label="Upvote">▲ ${q.votes}</button></div>`).join('');
+  }
+  SCREENS.questions = it => { main.innerHTML = `<h1>${esc(it.title || 'Questions')}</h1>` + askBox(it); wireAsk(it); };
+
+  // ── swipe ───────────────────────────────────────────────────────────
+  SCREENS.swipe = it => {
+    const mine = view.mine || {};
+    if (!draft) draft = Object.assign({}, mine);
+    const left = it.cards.map((c, k) => k).filter(k => draft[k] === undefined);
+    main.oninput = null; main.onkeydown = null;
+    if (!left.length) { main.innerHTML = `<h1>${esc(it.prompt)}</h1><div class="sent">All done. Thank you.</div><p class="hint"></p>`; main.onclick = null; return; }
+    const k = left[0], c = it.cards[k];
+    main.innerHTML = `<h1>${esc(it.prompt)}</h1>
+      <div class="stack"><div class="cardx" id="card"><span class="stamp y">${esc(it.yes || 'Yes')}</span><span class="stamp n">${esc(it.no || 'No')}</span>
+      ${c.image ? `<img src="${esc(c.image)}" alt="">` : ''}<h2>${esc(c.title || '')}</h2><p>${esc(c.text || '')}</p></div></div>
+      <div class="yn"><button data-yes="0">${esc(it.no || 'No')}</button><button class="y" data-yes="1">${esc(it.yes || 'Yes')}</button></div>
+      <div class="count">${it.cards.length - left.length + 1} of ${it.cards.length}</div><p class="hint"></p>`;
+    const card = $('#card');
+    const decide = yes => {
+      draft[k] = yes; editing = true;
+      card.style.transition = 'transform .3s ease-in, opacity .3s'; card.style.transform = `translateX(${yes ? 120 : -120}%) rotate(${yes ? 14 : -14}deg)`; card.style.opacity = 0;
+      call('answer', { voter, id: it.id, value: { [k]: yes } }).catch(() => {});
+      setTimeout(() => { editing = false; SCREENS.swipe(it); }, 260);
+    };
+    let x0 = null, dx = 0;
+    card.onpointerdown = e => { x0 = e.clientX; card.setPointerCapture(e.pointerId); card.style.transition = 'none'; };
+    card.onpointermove = e => {
+      if (x0 == null) return;
+      dx = e.clientX - x0;
+      card.style.transform = `translateX(${dx}px) rotate(${dx / 22}deg)`;
+      card.querySelector('.y').style.opacity = Math.max(0, Math.min(1, dx / 90));
+      card.querySelector('.n').style.opacity = Math.max(0, Math.min(1, -dx / 90));
+    };
+    card.onpointerup = card.onpointercancel = () => {
+      if (x0 == null) return; x0 = null;
+      if (Math.abs(dx) > 90) decide(dx > 0);
+      else { card.style.transition = 'transform .3s'; card.style.transform = ''; card.querySelectorAll('.stamp').forEach(s => { s.style.opacity = 0; }); }
+      dx = 0;
+    };
+    main.onclick = e => { const b = e.target.closest('[data-yes]'); if (b) decide(b.dataset.yes === '1'); };
+  };
+
+  // ── take-home ───────────────────────────────────────────────────────
+  SCREENS.takehome = t => {
+    main.oninput = null; main.onkeydown = null;
+    main.innerHTML = `<h1>${esc(t.title || 'Thank you')}</h1>${t.text ? `<p>${esc(t.text)}</p>` : ''}` +
+      (t.links || []).map(l => `<a class="link" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join('') +
+      (t.copy || []).map((c, k) => `<div class="copy"><b>${esc(c.label)}<button data-copy="${k}">Copy</button></b><pre>${esc(c.text)}</pre></div>`).join('') +
+      (navigator.share && t.share ? '<button class="go ghost" data-share>Share</button>' : '');
+    main.onclick = e => {
+      const c = e.target.closest('[data-copy]');
+      if (c) { navigator.clipboard.writeText(t.copy[+c.dataset.copy].text).then(() => { c.textContent = 'Copied'; setTimeout(() => { c.textContent = 'Copy'; }, 1500); }).catch(() => {}); }
+      else if (e.target.closest('[data-share]')) navigator.share({ title: t.title || document.title, url: t.share }).catch(() => {});
+    };
+  };
+
+  poll();
+})();
+</script>
+</body>
+</html>

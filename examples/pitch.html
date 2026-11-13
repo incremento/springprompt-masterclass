@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stockpot: seed pitch</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../kit/deck.css">
+<style>
+/* One-off for this talk: the WhatsApp-style order message on slide 5. */
+.chat{background:var(--paper);border-radius:22px;padding:18px 18px 16px;max-width:520px;margin-left:auto;border:1px solid var(--line)}
+.chat .who{font:650 13px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:2px 4px 12px}
+.chat .msg{background:var(--panel);border-radius:6px 18px 18px 18px;padding:16px 18px;font-size:19px;line-height:1.35;box-shadow:var(--shadow)}
+.chat .msg p{color:var(--mute);margin-bottom:10px}
+.chat table{width:100%;border-collapse:collapse;font-size:19px;font-variant-numeric:tabular-nums}
+.chat td{padding:7px 0;border-top:1px solid var(--line)}
+.chat td:nth-child(2){text-align:right;font-weight:650;white-space:nowrap;padding-left:12px}
+.chat td small{display:block;font-size:15px;color:var(--faint)}
+.chat .btns{display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-top:12px}
+.chat .btns span{border-radius:12px;padding:13px;text-align:center;font:650 18px/1 var(--sans);border:1.5px solid var(--line);color:var(--mute);background:var(--panel)}
+.chat .btns span:first-child{background:var(--accent);border-color:var(--accent);color:#fff}
+.time{display:block;font:650 15px/1 var(--sans);letter-spacing:.14em;color:var(--accent);margin-bottom:18px}
+</style>
+</head>
+<body>
+<!-- A ten-slide pitch for an invented company, written with this skill as its test run.
+     Scale guess with reveal on the join slide, a line chart, stat tiles, a multiple-choice vote,
+     a segmented bar, and questions followed by the take-home links. Every figure is made up. -->
+<div id="stage">
+
+<!-- 1 · cover -->
+<section class="slide cover" data-title="Stockpot">
+  <div class="aura"><i></i><i></i><i></i></div>
+  <h1>Stockpot</h1>
+  <p><b>Tomorrow’s food order, written before the owner goes home</b>Seed pitch · Demo day, November 2026</p>
+  <aside class="notes">
+    ▶ I’m going to start by asking you for a number.
+    • Stockpot is an invented company. This deck is a test of the presentation kit
+    • Every figure in it is made up
+  </aside>
+</section>
+
+<!-- 2 · join, with the first question already open -->
+<section class="slide" data-section="Problem" data-phase="bin">
+  <h2>Before I start, a guess</h2>
+  <p class="lead">Scan the code. One question is waiting on your phone.</p>
+  <div data-join style="--qr:360px;margin-top:8px"></div>
+  <aside class="notes">
+    ▶ Phones out, camera on the code. There is one question waiting for you.
+    • Say what they should see: a slider and a Send button
+    • Move on when the counter stops climbing
+    Latecomers can still join: the code is in the corner of the next slide.
+  </aside>
+</section>
+
+<!-- 3 · guess, then the real figure -->
+<section class="slide" data-phase="bin">
+  <h2>Of every $100 of food a small restaurant buys, how much goes in the bin?</h2>
+  <div class="corner-join" data-join></div>
+  <div data-live="bin" style="--h:400px;margin-top:26px"></div>
+  <i class="frag" data-go="reveal" data-for="bin"></i>
+  <aside class="notes">
+    ▶ Of every hundred dollars of food a small restaurant buys, how much ends up in the bin?
+    • Read out the room’s median while guesses come in
+    • Next press shows the real figure: $11 in our pilot kitchens
+    • A kitchen like this keeps about $6 of every $100 as profit. The bin is bigger than the profit
+  </aside>
+</section>
+
+<!-- 4 · why it happens -->
+<section class="slide">
+  <h2>The order gets written at midnight, from memory</h2>
+  <div class="cols c3" style="margin-top:28px">
+    <div class="card tall" style="min-height:380px"><span class="time">11:40 PM</span><h3>Count by eye</h3><p>The owner looks into the walk-in fridge and guesses what is left.</p></div>
+    <div class="card tall frag" style="min-height:380px"><span class="time">11:55 PM</span><h3>Six messages</h3><p>One WhatsApp to each supplier, typed from memory after a fourteen-hour day.</p></div>
+    <div class="card tall frag" style="min-height:380px"><span class="time">NEXT DAY</span><h3>Too much fish, no limes</h3><p>The fish goes in the bin on Thursday. Someone runs to the market for limes.</p></div>
+  </div>
+  <p class="q pin frag">$11 binned in every $100 bought. The kitchen keeps about $6 as profit.</p>
+  <aside class="notes">
+    ▶ Here is why. This is how the order gets made in almost every kitchen we visited.
+    • Nobody is careless. They are tired, and the information is in three places
+    • The till knows what sold. The fridge knows what is left. Neither is open at midnight
+    Three presses: second card, third card, then the line at the bottom.
+  </aside>
+</section>
+
+<!-- 5 · what we do -->
+<section class="slide" data-section="Product">
+  <h2>Stockpot writes tomorrow’s order. The owner taps approve.</h2>
+  <div class="split" style="margin-top:26px;grid-template-columns:1fr 540px">
+    <ol class="steps">
+      <li><div>Reads the till<small>What sold today, dish by dish</small></div></li>
+      <li><div>Checks what is left<small>One photo of each fridge shelf at closing</small></div></li>
+      <li><div>Drafts each supplier’s order<small>Sent to the owner on WhatsApp at 10 pm</small></div></li>
+    </ol>
+    <div class="chat">
+      <div class="who">Stockpot · 10:02 pm</div>
+      <div class="msg">
+        <p>Tomorrow’s order. Today was 142 covers and rain is forecast.</p>
+        <table>
+          <tr><td>Sea bass<small>You binned 3 kg last Thursday</small></td><td>6 kg</td></tr>
+          <tr><td>Limes<small>Ran out on Tuesday</small></td><td>4 kg</td></tr>
+          <tr><td>Jasmine rice<small>22 kg still in the store</small></td><td>skip</td></tr>
+        </table>
+      </div>
+      <div class="btns"><span>Approve all</span><span>Change a line</span></div>
+    </div>
+  </div>
+  <div class="callout frag" style="margin-top:34px">No new app to learn. The order arrives where the owner already talks to suppliers.</div>
+  <aside class="notes">
+    ▶ Stockpot writes tomorrow’s order, and the owner taps approve.
+    • Every line says why, so the owner can disagree with it
+    • Approved orders go to each supplier in the format that supplier already gets
+    • Next press: no new app. It arrives where the owner already talks to suppliers
+  </aside>
+</section>
+
+<!-- 6 · proof -->
+<section class="slide" data-section="Proof">
+  <h2>Pilot kitchens halved what they bin within eight weeks</h2>
+  <p class="lead">Share of food bought that was thrown away, by week of the pilot.</p>
+  <figure class="chart"><script type="application/json">
+  {"type":"line","suffix":"%","decimals":1,"zero":true,"highlight":"With Stockpot","reveal":"items",
+   "alt":"Kitchens using Stockpot went from binning 11.2% of food bought to 5.6% in eight weeks, while kitchens ordering by hand stayed near 11%",
+   "x":["Week 0","Week 1","Week 2","Week 3","Week 4","Week 5","Week 6","Week 7","Week 8"],
+   "series":[
+     {"name":"Ordering by hand","values":[11.0,11.3,10.8,11.1,10.9,11.2,10.7,11.0,10.9]},
+     {"name":"With Stockpot","values":[11.2,10.4,9.1,8.3,7.4,6.8,6.1,5.8,5.6]}
+   ],
+   "annotations":[{"x":"Week 2","series":"With Stockpot","text":"Owners stop editing most lines","side":"below"}],
+   "source":"38 pilot kitchens and 12 comparison kitchens. Invented figures for a test deck."}
+  </script></figure>
+  <aside class="notes">
+    ▶ We ran it in 38 kitchens for eight weeks, next to 12 kitchens that kept ordering by hand.
+    • First press: the kitchens ordering by hand. Flat, around 11%
+    • Second press: the Stockpot kitchens. 11.2% down to 5.6%
+    • Third press: week two is when owners stop changing most lines
+    For a kitchen buying $12,000 of food a month that is about $650 a month back.
+  </aside>
+</section>
+
+<!-- 7 · traction -->
+<section class="slide">
+  <h2>38 kitchens pay $190 a month, and none has left</h2>
+  <figure class="chart" style="margin-top:26px"><script type="application/json">
+  {"type":"stat","alt":"38 paying kitchens, $7,220 monthly revenue, 94% of order lines approved unchanged",
+   "data":[
+     {"value":38,"label":"paying kitchens","delta":9,"deltaLabel":"this month","good":"up","trend":[4,9,14,21,29,38]},
+     {"value":7220,"prefix":"$","label":"monthly revenue","delta":1710,"deltaLabel":"this month","good":"up","trend":[760,1710,2660,3990,5510,7220]},
+     {"value":94,"suffix":"%","label":"of order lines approved unchanged","delta":6,"deltaSuffix":" pts","deltaLabel":"since week one","good":"up","trend":[71,80,88,91,93,94]}
+   ],
+   "source":"Six months since the first paying kitchen. Invented figures for a test deck."}
+  </script></figure>
+  <div class="callout frag" style="margin-top:44px">A kitchen gets back about $650 a month in food it no longer bins, for a $190 subscription.</div>
+  <aside class="notes">
+    ▶ Thirty-eight kitchens pay us $190 a month, and none has left.
+    • All 38 came from the pilot or from another owner’s recommendation
+    • 94% of lines approved unchanged: owners trust it with real orders
+    • Next press: the $650 a month line. That is why they stay
+  </aside>
+</section>
+
+<!-- 8 · the room's objections -->
+<section class="slide" data-section="The round" data-phase="doubts">
+  <h2>What would you need answered before you invest?</h2>
+  <div data-live="doubts" data-sort="votes" style="margin-top:44px;--bar:84px;--labw:440px"></div>
+  <aside class="notes">
+    ▶ Before I tell you what we are raising, tell me what would stop you. Pick as many as you like.
+    • Answer the top one, then the second if there is time
+    Trust: 94% of lines approved unchanged, and every line gives its reason.
+    Selling: owners recruit each other. 21 of 38 came by referral. Suppliers want it too, because orders arrive clean.
+    Copying: a till company sees sales. It does not see the fridge or the supplier thread. We see all three.
+    Other cities: the model learns per kitchen. A new city needs supplier contacts, about three weeks of work.
+  </aside>
+</section>
+
+<!-- 9 · the ask -->
+<section class="slide">
+  <h2>We are raising $1.2M to reach 400 kitchens in 18 months</h2>
+  <figure class="chart" style="margin-top:30px"><script type="application/json">
+  {"type":"segmented","show":"value","prefix":"$","suffix":"K",
+   "alt":"Of $1.2M: $480K engineering, $420K onboarding team, $180K supplier links, $120K reserve",
+   "data":[{"label":"Engineering","value":480},{"label":"Onboarding team","value":420},{"label":"Supplier links","value":180},{"label":"Reserve","value":120}]}
+  </script></figure>
+  <div class="cols c3" style="margin-top:36px">
+    <div class="card tall" style="min-height:250px"><span class="time">BY MONTH 9</span><h3>Two more cities</h3><p>Each needs about three weeks of supplier set-up.</p></div>
+    <div class="card tall frag" style="min-height:250px"><span class="time">BY MONTH 12</span><h3>Suppliers on the other end</h3><p>Orders arrive as data, so they can plan deliveries.</p></div>
+    <div class="card tall frag" style="min-height:250px"><span class="time">BY MONTH 18</span><h3>400 paying kitchens</h3><p>$76,000 a month in subscriptions.</p></div>
+  </div>
+  <p class="sm" style="margin-top:30px">Founders: a head chef of nine years, and the engineer who built ordering for a grocery delivery service.</p>
+  <aside class="notes">
+    ▶ We are raising one point two million dollars to get from 38 kitchens to 400 in eighteen months.
+    • Most of the money is people: engineers, and the team that sets each kitchen up
+    • 400 kitchens at $190 is $76,000 a month
+    • Two presses: suppliers at month 12, then 400 kitchens at month 18
+  </aside>
+</section>
+
+<!-- 10 · questions, then the links -->
+<section class="slide" data-section="Questions" data-phase="qa">
+  <h2>Questions</h2>
+  <p class="lead">Type one on your phone, or upvote somebody else’s.</p>
+  <div data-live="qa"></div>
+  <i class="frag" data-go="phase" data-to="takehome"></i>
+  <aside class="notes">
+    ▶ Questions. Type one on your phone, or upvote one that is already there.
+    • Q&amp;A tab on the remote: Show on screen, then Answered
+    • Last press of Next sends the contact details and the one-page summary to every phone
+  </aside>
+</section>
+
+</div>
+
+<script type="application/json" id="room">
+{
+  "title": "Stockpot: seed pitch",
+  "minutes": 10,
+  "theme": { "accent": "#0F6B6B", "soft": "#BFE5DF", "onDark": "#6CC4BC", "aura": ["#BFE5DF", "#4FA39B", "#F0C98A"] },
+  "interactions": [
+    { "id": "bin", "type": "scale", "prompt": "Of every $100 of food a small restaurant buys, how much goes in the bin?",
+      "min": 0, "max": 40, "step": 1, "start": 20, "prefix": "$", "answer": 11, "answerLabel": "In our pilot kitchens:" },
+    { "id": "doubts", "type": "choice", "multi": true, "prompt": "What would you need answered before you invest?",
+      "options": ["Will owners trust it with real money?", "Can you sell it one kitchen at a time?", "What stops a till company copying it?", "Does it work outside one city?"] },
+    { "id": "qa", "type": "questions", "prompt": "Ask a question", "always": true,
+      "sample": ["How do you read the fridge photo?", "What does a supplier see?", "Who pays if an order is wrong?"] }
+  ],
+  "takehome": {
+    "title": "Stockpot",
+    "text": "Thanks for listening. Stockpot is an invented company, made to test a presentation kit.",
+    "links": [
+      { "label": "One-page summary (example link)", "url": "https://example.com/stockpot-summary" },
+      { "label": "Make a deck like this one", "url": "https://github.com/incremento/springprompt-masterclass" }
+    ],
+    "copy": [
+      { "label": "Contact", "text": "founders@stockpot.example" }
+    ]
+  }
+}
+</script>
+<script src="../kit/qr.js"></script>
+<script src="../kit/charts.js"></script>
+<script src="../kit/deck.js"></script>
+</body>
+</html>

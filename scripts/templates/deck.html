@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="kit/deck.css">
+<style>
+/* Theme: override any token from kit/deck.css here. See references/design.md.
+:root{ --accent:#3E7A4F; --accent-soft:#C4E8A4; --accent-on-dark:#7FB98E; --aura1:#BFE3A0; --aura2:#5FA377; --aura3:#F0C98A; }
+*/
+</style>
+</head>
+<body>
+<div id="stage">
+
+<section class="slide cover" data-title="{{TITLE}}">
+  <div class="aura"><i></i><i></i><i></i></div>
+  <h1>{{TITLE}}</h1>
+  <p><b>Speaker name</b>Event, date</p>
+  <aside class="notes">
+    ▶ The first sentence you will say.
+    • Key point
+    • Key point
+  </aside>
+</section>
+
+<section class="slide" data-section="Start">
+  <h2>Get your phone out</h2>
+  <p class="lead">You will vote and ask questions from it. Nothing to install.</p>
+  <div data-join style="--qr:360px;margin-top:8px"></div>
+  <aside class="notes">
+    ▶ Point your camera at the code. You should see a page that says “You’re in”.
+    • Wait for the counter to stop climbing
+  </aside>
+</section>
+
+<section class="slide" data-phase="warmup">
+  <h2>A first, easy question</h2>
+  <div class="corner-join" data-join></div>
+  <div data-live="warmup" style="margin-top:40px;max-width:1000px;--bar:48px"></div>
+  <aside class="notes">
+    ▶ Read the question out loud.
+    • Name the leading answer as the bars move
+  </aside>
+</section>
+
+<section class="slide" data-section="Questions" data-phase="qa">
+  <h2>Questions</h2>
+  <p class="lead">Type one on your phone, or upvote somebody else’s.</p>
+  <div data-live="qa"></div>
+  <aside class="notes">▶ Questions. Type one on your phone, or upvote one that is already there.</aside>
+</section>
+
+<section class="slide statement" data-phase="takehome">
+  <h2>Thank you</h2>
+  <p>The links from this talk are on your phone now.</p>
+  <aside class="notes">▶ Thank you. The links are on your phone now.</aside>
+</section>
+
+</div>
+
+<script type="application/json" id="room">
+{
+  "title": "{{TITLE}}",
+  "minutes": 20,
+  "interactions": [
+    { "id": "warmup", "type": "choice", "prompt": "A first, easy question", "options": ["One answer", "Another answer", "A third answer"] },
+    { "id": "qa", "type": "questions", "prompt": "Ask a question", "always": true }
+  ],
+  "takehome": { "title": "Thank you", "text": "Everything from the talk, to keep.", "links": [] }
+}
+</script>
+<script src="kit/qr.js"></script>
+<script src="kit/charts.js"></script>
+<script src="kit/deck.js"></script>
+</body>
+</html>

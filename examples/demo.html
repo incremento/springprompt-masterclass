@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Breakfast, live</title>
+<link rel="icon" href="data:,">
+<!-- In your own talk folder these paths are kit/deck.css, kit/qr.js and so on. -->
+<link rel="stylesheet" href="../kit/deck.css">
+</head>
+<body>
+<div id="stage">
+
+<!-- 1 · cover -->
+<section class="slide cover" data-title="Breakfast, live">
+  <div class="aura"><i></i><i></i><i></i></div>
+  <h1>Breakfast, live</h1>
+  <p><b>A short demo talk</b>Every answer on these slides comes from the room.</p>
+  <aside class="notes">
+    ▶ Good morning. This talk is about breakfast, and you are going to supply the data.
+    • This deck shows every feature of the kit once
+    • Lines starting with ▶ are the opening line; lines starting with • are key points
+    Anything else in the notes is detail you can glance at. Press N on the laptop to see notes, or use the Notes tab on the remote.
+  </aside>
+</section>
+
+<!-- 2 · join -->
+<section class="slide" data-section="Warm-up">
+  <h2>Get your phone out</h2>
+  <p class="lead">You will vote, guess and ask questions from it. Nothing to install and nothing to sign up for.</p>
+  <div data-join style="--qr:360px;margin-top:8px"></div>
+  <aside class="notes">
+    ▶ Point your camera at the code. You should see a page that says “You’re in”.
+    • Wait until the counter stops climbing
+    • Press Q at any time to bring this code back as an overlay
+    The address under the code is for anyone whose camera will not scan.
+  </aside>
+</section>
+
+<!-- 3 · choice poll -->
+<section class="slide" data-phase="morning">
+  <h2>What did you have this morning?</h2>
+  <div class="corner-join" data-join></div>
+  <div data-live="morning" style="margin-top:40px;max-width:1000px;--bar:48px"></div>
+  <aside class="notes">
+    ▶ First question, an easy one. What did you have this morning?
+    • Read out the leader as the bars move
+    • data-phase="morning" on this slide puts the question on every phone
+    Leaving the slide sends phones back to the waiting screen, unless the next slide shows the same results.
+  </aside>
+</section>
+
+<!-- 4 · cards with click-reveals -->
+<section class="slide">
+  <h2>Most mornings are one of three kinds</h2>
+  <div class="cols c3" style="margin-top:28px">
+    <div class="card tall"><span class="n">01</span><h3>The fast one</h3><p>Eaten standing up. Toast, a banana, whatever is next to the kettle.</p></div>
+    <div class="card tall frag"><span class="n">02</span><h3>The slow one</h3><p>Sitting down, with something cooked. Usually a weekend.</p></div>
+    <div class="card tall frag"><span class="n">03</span><h3>The skipped one</h3><p>Nothing until lunch, and a second coffee to cover the gap.</p></div>
+  </div>
+  <p class="q frag">Which one was today?</p>
+  <aside class="notes">
+    ▶ Most mornings fall into one of three kinds.
+    • Each press of Next shows one more card (class="frag")
+    • The Next button on the remote shows “click 1 of 3”
+    Tap a card in the remote’s preview to put a highlight box around it on the big screen.
+  </aside>
+</section>
+
+<!-- 5 · guess a number, then reveal -->
+<section class="slide" data-phase="eggs">
+  <h2>How many eggs does one hen lay in a year?</h2>
+  <p class="lead">Guess on your phone. No looking it up.</p>
+  <div data-live="eggs" style="--h:330px"></div>
+  <i class="frag" data-go="reveal" data-for="eggs"></i>
+  <aside class="notes">
+    ▶ A guess this time. How many eggs does one hen lay in a year?
+    • Let the histogram settle, read out the room’s median
+    • Next press reveals the real figure (about 300 for a modern laying hen)
+    The answer is kept off the phones: “answer” in the room block is only sent to the slides.
+  </aside>
+</section>
+
+<!-- the chart behind the answer: guess, reveal, explain -->
+<section class="slide">
+  <h2>A hen lays about twice as many eggs as her great-grandmothers did</h2>
+  <p class="lead">Eggs per laying hen per year.</p>
+  <figure class="chart"><script type="application/json">
+  {"type":"line","h":460,"zero":true,"reveal":"notes",
+   "alt":"Eggs per hen per year rose from about 150 in 1930 to about 300 in 2020",
+   "x":["1930","1950","1970","1990","2010","2020"],
+   "series":[{"name":"Eggs per hen","values":[150,175,220,250,275,300]}],
+   "annotations":[{"x":"1950","series":"Eggs per hen","text":"Breeding for laying begins in earnest","side":"below"}],
+   "source":"Rounded example figures for this demo, not a dataset."}
+  </script></figure>
+  <aside class="notes">
+    ▶ Here is the story behind that number.
+    • About 150 a year in 1930, about 300 now
+    • Next press adds the note on 1950
+    This is a chart from kit/charts.js: a JSON block in a figure. See references/charts.md for all 13 types.
+  </aside>
+</section>
+
+<section class="slide" data-optional>
+  <h2>A cooked breakfast takes ten times as long as a bowl of cereal</h2>
+  <figure class="chart" style="margin-top:24px"><script type="application/json">
+  {"type":"hbar","h":500,"suffix":" min","highlight":"Full cooked breakfast","sort":"asc",
+   "alt":"Minutes to make: cereal 2, toast 4, porridge 7, eggs 9, full cooked breakfast 22",
+   "data":[{"label":"Cereal","value":2},{"label":"Toast","value":4},{"label":"Porridge","value":7},{"label":"Eggs on toast","value":9},{"label":"Full cooked breakfast","value":22}],
+   "source":"Example timings for this demo."}
+  </script></figure>
+  <aside class="notes">
+    ▶ Which is why most of us have the same thing every weekday.
+    • One bar is highlighted; the rest stay grey so the eye goes to it
+    • This slide is marked optional: the remote offers to skip it when you are behind
+  </aside>
+</section>
+
+<!-- words -->
+<section class="slide" data-section="Taste" data-phase="weekend">
+  <h2>One word for your ideal weekend breakfast</h2>
+  <div data-live="weekend" style="margin-top:26px"></div>
+  <aside class="notes">
+    ▶ Now words instead of numbers. One word for your ideal weekend breakfast.
+    • Words that several people type grow
+    • A word you do not want on screen: Live tab on the remote, tap ✕ next to it
+  </aside>
+</section>
+
+<!-- swipe -->
+<section class="slide" data-phase="odd">
+  <h2>Would you eat it for breakfast?</h2>
+  <p class="lead">Six things, one at a time. Swipe right for yes, left for no.</p>
+  <div data-live="odd" style="--bar:42px"></div>
+  <aside class="notes">
+    ▶ Six things on your phone, one at a time. Would you eat it for breakfast?
+    • The list re-orders itself as people swipe
+    • Good for quick reactions to a set of options
+  </aside>
+</section>
+
+<!-- quiz with a right answer -->
+<section class="slide" data-phase="fruit">
+  <h2>Which of these is a fruit, botanically?</h2>
+  <div data-live="fruit" data-sort="given" style="margin-top:40px;max-width:1000px;--bar:56px"></div>
+  <i class="frag" data-go="reveal" data-for="fruit"></i>
+  <aside class="notes">
+    ▶ One with a right answer. Which of these is a fruit, botanically?
+    • Wait for the votes, then press Next to mark the right one
+    • Tomato. Rhubarb is a stalk, the others are a root and a stem
+  </aside>
+</section>
+
+<!-- compare -->
+<section class="slide" data-optional>
+  <h2>The same person, two different mornings</h2>
+  <div class="compare" style="margin-top:28px">
+    <div><b>Tuesday</b>Alarm at 6:40. Coffee while finding keys. A cereal bar on the train, eaten in four bites.</div>
+    <div class="after"><b>Saturday</b>No alarm. Eggs, toast and the radio. A second pot of coffee because nobody is leaving.</div>
+  </div>
+  <div class="callout frag" style="margin-top:26px">The food changes less than the time given to it.</div>
+  <aside class="notes">
+    ▶ Here is the same person on a Tuesday and on a Saturday.
+    • This slide is marked data-optional: the remote offers “Safe to skip” when you are running late
+  </aside>
+</section>
+
+<!-- statement -->
+<section class="slide statement">
+  <h2>Everything on those slides came from <mark>this room</mark>.</h2>
+  <p>Nobody saw the results before you did, including me.</p>
+  <aside class="notes">
+    ▶ Everything you just saw came from this room.
+    • A statement slide: one sentence, nothing else
+  </aside>
+</section>
+
+<!-- questions -->
+<section class="slide" data-section="Questions" data-phase="qa">
+  <h2>Questions</h2>
+  <p class="lead">Type one on your phone, or upvote somebody else’s.</p>
+  <div data-live="qa"></div>
+  <aside class="notes">
+    ▶ Questions. Type one on your phone, or upvote one that is already there.
+    • Q&amp;A tab on the remote: “Show on screen” puts one question up large
+    • Mark each one Answered as you go
+    People could send questions from the waiting screen all along, because this interaction has "always": true.
+  </aside>
+</section>
+
+<!-- take-home -->
+<section class="slide statement" data-phase="takehome">
+  <h2>Thank you</h2>
+  <p>The links from this talk are on your phone now.</p>
+  <aside class="notes">
+    ▶ Thank you. The links are on your phone now.
+    • data-phase="takehome" sends the take-home screen to every phone
+    • It stays there after the talk, so people can open the links later
+  </aside>
+</section>
+
+<!-- appendix: slides after data-appendix are outside the page count and the pace clock -->
+<section class="slide" data-appendix data-section="Appendix">
+  <h2>How to cook an egg, in steps</h2>
+  <ol class="steps" style="margin-top:26px;max-width:860px">
+    <li><div>Bring the water to a boil<small>Enough to cover the egg by a finger’s width</small></div></li>
+    <li><div>Lower the egg in with a spoon<small>Straight from the fridge is fine</small></div></li>
+    <li><div>Six and a half minutes for a soft yolk<small>Nine for one that is set</small></div></li>
+    <li><div>Into cold water for a minute, then peel</div></li>
+  </ol>
+  <aside class="notes">
+    ▶ Appendix: slides you can jump to from the remote’s Find tab if somebody asks.
+  </aside>
+</section>
+
+<section class="slide">
+  <h2>Cooking times at a glance</h2>
+  <table class="t" style="margin-top:24px;max-width:900px">
+    <tr><th>Style</th><th class="num">Minutes</th><th>Yolk</th></tr>
+    <tr><td>Soft-boiled</td><td class="num">6½</td><td>Runny</td></tr>
+    <tr class="pick"><td>Medium</td><td class="num">8</td><td>Jammy</td></tr>
+    <tr><td>Hard-boiled</td><td class="num">10</td><td>Set</td></tr>
+    <tr><td>Poached</td><td class="num">3</td><td>Runny</td></tr>
+  </table>
+  <p class="source">Times for a large egg from the fridge, into boiling water.</p>
+  <aside class="notes">
+    ▶ For anyone who asks how long: here are the times.
+    • Appendix slides sit outside the page count and the pace clock
+    • Reach them from the remote's Find tab
+  </aside>
+</section>
+
+<section class="slide night">
+  <h2>A dark slide, for a change of pace</h2>
+  <p class="lead">Add class="night" to any slide. Cards, lists and live results all follow.</p>
+  <div class="split" style="margin-top:10px">
+    <ul class="list">
+      <li>Coffee<small>Most of the room, most days</small></li>
+      <li>Tea<small>The rest</small></li>
+      <li>Neither<small>There is always one</small></li>
+    </ul>
+    <pre class="code"><span class="c">&lt;!-- a slide --&gt;</span>
+&lt;section class="slide <em>night</em>"&gt;
+  &lt;h2&gt;A dark slide&lt;/h2&gt;
+  &lt;ul class="<b>list</b>"&gt;…&lt;/ul&gt;
+&lt;/section&gt;</pre>
+  </div>
+  <aside class="notes">
+    ▶ One more layout: the dark slide.
+    • Use it for a story, a quote or a demo, not for every slide
+  </aside>
+</section>
+
+</div>
+
+<script type="application/json" id="room">
+{
+  "title": "Breakfast, live",
+  "minutes": 8,
+  "interactions": [
+    { "id": "morning", "type": "choice", "prompt": "What did you have this morning?",
+      "options": ["Cereal or porridge", "Toast or a pastry", "Eggs or something cooked", "Fruit or yoghurt", "Only coffee or tea"],
+      "none": "Nothing yet" },
+    { "id": "eggs", "type": "scale", "prompt": "How many eggs does one hen lay in a year?",
+      "min": 0, "max": 600, "step": 10, "start": 100, "answer": 300, "answerLabel": "A modern laying hen: about" },
+    { "id": "weekend", "type": "words", "prompt": "One word for your ideal weekend breakfast", "max": 2,
+      "sample": ["pancakes", "eggs", "slow", "coffee", "bacon", "croissant", "outside", "late", "porridge", "quiet"] },
+    { "id": "odd", "type": "swipe", "prompt": "Would you eat it for breakfast?", "yes": "Yes", "no": "No",
+      "cards": [
+        { "title": "Cold pizza", "text": "From the night before, straight from the box." },
+        { "title": "Soup", "text": "A bowl of broth with noodles." },
+        { "title": "Leftover curry", "text": "Reheated, with rice." },
+        { "title": "Salad", "text": "Leaves, tomato, a little oil." },
+        { "title": "Ice cream", "text": "Two scoops, any flavour." },
+        { "title": "Grilled fish", "text": "With rice and pickles." }
+      ] },
+    { "id": "fruit", "type": "choice", "prompt": "Which of these is a fruit, botanically?",
+      "options": ["Rhubarb", "Tomato", "Carrot", "Celery"], "correct": 1 },
+    { "id": "qa", "type": "questions", "prompt": "Ask a question", "always": true,
+      "sample": ["Is cereal a soup?", "How long for a soft-boiled egg?", "What do you eat before a talk?"] }
+  ],
+  "takehome": {
+    "title": "Thank you",
+    "text": "Everything from the talk, to keep.",
+    "links": [
+      { "label": "Make a deck like this one", "url": "https://github.com/incremento/springprompt-masterclass" }
+    ],
+    "copy": [
+      { "label": "A soft-boiled egg", "text": "Boiling water, egg straight from the fridge, six and a half minutes, then cold water for one minute." }
+    ],
+    "share": true
+  }
+}
+</script>
+<script src="../kit/qr.js"></script>
+<script src="../kit/charts.js"></script>
+<script src="../kit/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#141A17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex">
+<title>Remote</title>
+<style>
+:root{--bg:#141A17;--panel:#1E2622;--panel2:#27312C;--line:#34403A;--ink:#F4F1E8;--mute:#B3B8B0;--faint:#7F8A83;--accent:#7FB98E;--strong:#3E7A4F;--warm:#E0A050;--bad:#E07A62}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,"Segoe UI",system-ui,Roboto,sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body{display:flex;flex-direction:column;padding:max(8px,env(safe-area-inset-top)) 12px max(10px,env(safe-area-inset-bottom));max-width:560px;margin:0 auto;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
+#top{display:grid;grid-template-columns:auto auto 1fr auto auto;gap:10px;align-items:center;font-size:14px;height:34px;flex:none}
+#dot{width:10px;height:10px;border-radius:50%;background:var(--bad)}#dot.on{background:var(--accent)}
+#page{font-weight:700;font-variant-numeric:tabular-nums}
+#title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mute)}
+#pace{font-size:12px;font-weight:700;border-radius:99px;padding:3px 8px;background:var(--panel2);color:var(--mute);display:none}
+#pace.late{background:#5A3A12;color:var(--warm)}#pace.early{background:#1F3A28;color:var(--accent)}
+#clock{font-weight:700;font-variant-numeric:tabular-nums;padding:4px 0 4px 6px}#clock.paused{color:var(--faint)}
+#prev{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;flex:none;border:1px solid var(--line)}
+#prev iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+#tap{position:absolute;inset:0}
+#mode{position:absolute;right:6px;bottom:6px;background:#000a;color:#fff;font-size:12px;font-weight:600;border-radius:99px;padding:6px 10px;backdrop-filter:blur(6px)}
+#gone{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;background:#000c;color:#fff;font-size:15px}
+#keys{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;margin:10px 0 0;flex:none}
+#keys button{border-radius:16px;font-weight:700}
+#back{background:var(--panel);border:1px solid var(--line);font-size:16px;color:var(--mute)}
+#next{background:var(--strong);font-size:22px;height:92px;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .08s,background .15s}
+#next:active,#back:active{transform:scale(.98)}
+#next small{font-size:12.5px;font-weight:500;opacity:.85;max-width:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dots{display:flex;gap:4px;height:6px}#dots i{width:6px;height:6px;border-radius:50%;background:#fff5}#dots i.on{background:#fff}
+#skip{flex:none;margin-top:8px;font-size:13.5px;color:var(--mute);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px}
+#skip.arm{background:#5A3A12;color:#fff;border-color:var(--warm)}#skip.safe{color:var(--warm)}#skip[disabled]{opacity:.35}
+#tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:10px;flex:none;background:var(--panel);border-radius:12px;padding:4px}
+#tabs button{font-size:13.5px;font-weight:600;color:var(--mute);border-radius:9px;padding:8px 0;position:relative}
+#tabs button.on{background:var(--panel2);color:var(--ink)}
+#tabs b{position:absolute;top:2px;right:6px;font-size:10px;background:var(--warm);color:#000;border-radius:99px;padding:0 5px;display:none}
+#pane{flex:1;min-height:0;overflow:auto;margin-top:8px;-webkit-overflow-scrolling:touch;padding-bottom:20px;user-select:text;-webkit-user-select:text}
+.opener{font-size:19px;font-weight:650;line-height:1.3;margin:4px 0 10px}
+.pt{display:grid;grid-template-columns:16px 1fr;font-size:17.5px;line-height:1.35;margin-bottom:6px}.pt::before{content:"•";color:var(--accent)}
+.rest{white-space:pre-wrap;color:var(--mute);font-size:15.5px;line-height:1.45;margin-top:10px}
+.empty{color:var(--faint);font-size:15px;padding:14px 2px}
+.label{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:16px 0 8px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:14.5px;font-weight:600}
+.btn.on{background:var(--strong);border-color:var(--strong)}.btn.warn{color:var(--warm)}.btn.arm{background:#5A3A12;border-color:var(--warm);color:#fff}
+.btn.wide{width:100%;text-align:left;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.btn small{color:var(--faint);font-weight:500}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat div{background:var(--panel);border-radius:12px;padding:10px 14px}.stat b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.stat span{font-size:12.5px;color:var(--faint)}
+.vrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--panel);border-radius:12px;padding:8px 8px 8px 14px;margin-bottom:6px;font-size:15px}
+.vrow .n{font-weight:700;font-variant-numeric:tabular-nums;font-size:17px;margin-right:6px}
+.pm{display:flex;align-items:center;gap:4px}.pm button{width:40px;height:40px;border-radius:10px;background:var(--panel2);font-size:20px}.pm span{min-width:26px;text-align:center;color:var(--warm);font-variant-numeric:tabular-nums;font-size:14px}
+.q{background:var(--panel);border-radius:12px;padding:12px 14px;margin-bottom:8px}.q.done{opacity:.5}.q.shown{outline:2px solid var(--accent)}
+.q p{margin:0 0 10px;font-size:16.5px;line-height:1.35}.q p b{color:var(--accent);margin-right:8px;font-variant-numeric:tabular-nums}
+.q .row button{font-size:13px;padding:7px 11px;border-radius:9px;background:var(--panel2);font-weight:600}
+input[type=search]{width:100%;font:inherit;font-size:17px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;margin-bottom:8px;user-select:text;-webkit-user-select:text}
+.hit{display:block;width:100%;text-align:left;background:var(--panel);border-radius:12px;padding:10px 14px;margin-bottom:6px}
+.hit b{font-size:15px}.hit b i{font-style:normal;color:var(--accent);margin-right:8px;font-variant-numeric:tabular-nums}.hit span{display:block;font-size:13px;color:var(--faint);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chipw{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border-radius:99px;padding:6px 6px 6px 12px;font-size:14px;margin:0 6px 6px 0}.chipw button{width:26px;height:26px;border-radius:50%;background:var(--panel2);font-size:13px}.chipw.off{opacity:.4;text-decoration:line-through}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#000d;color:#fff;border-radius:99px;padding:9px 16px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="top"><i id="dot"></i><span id="page">–</span><span id="title">Waiting for the deck…</span><span id="pace"></span><button id="clock" aria-label="Clock: tap to pause, hold to reset">0:00</button></div>
+<div id="prev"><iframe id="mirror" title="Slide preview" tabindex="-1"></iframe><div id="tap"></div><button id="mode">Tap: highlight</button><div id="gone">The deck is not open.<br>Open the Slides link on the presenting laptop.</div></div>
+<div id="keys"><button id="back">Back</button><button id="next"><span id="nextl">Next</span><span id="dots"></span><small id="nexts"></small></button></div>
+<button id="skip">Skip next slide</button>
+<div id="tabs"><button data-t="notes" class="on">Notes</button><button data-t="live">Live</button><button data-t="qa">Q&amp;A<b id="qn"></b></button><button data-t="find">Find</button><button data-t="more">More</button></div>
+<div id="pane"></div>
+<div id="toast"></div>
+<script>
+(function () {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const pane = $('#pane'), mirror = $('#mirror');
+  let V = { ver: -1, sv: -1, state: {}, connected: false, phase: 'wait', online: 0 };
+  let slides = [], sv = -1, tab = 'notes', info = null, res = null, tapMode = 'hl', find = '', shownQ = '', gen = 0, mirrorReady = false;
+  const st = () => V.state || {};
+
+  async function api(path, body) {
+    const r = await fetch('/api/' + path, body === undefined ? { cache: 'no-store' } : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (!r.ok) throw Object.assign(new Error(r.status), { status: r.status });
+    return r.json();
+  }
+  const cmd = c => { if (navigator.vibrate) navigator.vibrate(8); startClock(); return api('remote/cmd', c).catch(() => toast('Not sent: no connection')); };
+  function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 1700); }
+
+  /* Buttons that are costly to press by accident need two taps. */
+  function arm(btn, label, fn) {
+    if (btn.classList.contains('arm')) { btn.classList.remove('arm'); btn.textContent = btn._label; clearTimeout(btn._t); fn(); return; }
+    btn._label = btn.textContent; btn.classList.add('arm'); btn.textContent = label;
+    btn._t = setTimeout(() => { btn.classList.remove('arm'); btn.textContent = btn._label; }, 3000);
+  }
+
+  // ── connection: one long-poll, restarted whenever the phone wakes ────
+  async function listen(my) {
+    let wait = 400;
+    while (my === gen) {
+      try {
+        const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 28000);
+        const r = await fetch('/api/remote/view?since=' + V.ver, { signal: ctl.signal, cache: 'no-store' });
+        clearTimeout(t);
+        if (r.status === 403) { $('#title').textContent = 'Open the Remote link from the setup page again.'; return; }
+        const v = await r.json();
+        if (my !== gen) return;
+        V = v; wait = 400;
+        if (v.sv !== sv) { const s = await api('remote/slides'); slides = s.slides || []; sv = s.sv; loadInfo(); }
+        paint();
+      } catch (e) { await new Promise(r => setTimeout(r, wait)); wait = Math.min(wait * 2, 4000); }
+    }
+  }
+  const kick = () => { V.ver = -1; listen(++gen); pollRes(); };
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { kick(); wake(); } });
+  addEventListener('pageshow', kick); addEventListener('online', kick);
+  let lock = null;
+  async function wake() { try { if (navigator.wakeLock && !document.hidden) lock = await navigator.wakeLock.request('screen'); } catch (e) {} }
+
+  let resT = 0;
+  async function pollRes() {
+    clearTimeout(resT);
+    try { res = await api('results'); paintBadge(); if (tab === 'live' || tab === 'qa') paintPane(true); } catch (e) {}
+    resT = setTimeout(pollRes, tab === 'live' || tab === 'qa' ? 1800 : 6000);
+  }
+
+  // ── clock and pace ───────────────────────────────────────────────────
+  let clock = { t0: 0, acc: 0 };
+  try { clock = JSON.parse(localStorage.getItem('mc_clock')) || clock; } catch (e) {}
+  const saveClock = () => { try { localStorage.setItem('mc_clock', JSON.stringify(clock)); } catch (e) {} };
+  const elapsed = () => clock.acc + (clock.t0 ? Date.now() - clock.t0 : 0);
+  function startClock() { if (!clock.t0 && !clock.acc) { clock.t0 = Date.now(); saveClock(); } }
+  const mmss = ms => { const s = Math.floor(Math.abs(ms) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  function tick() {
+    const c = $('#clock'), p = $('#pace');
+    c.textContent = mmss(elapsed()); c.classList.toggle('paused', !clock.t0);
+    const main = slides.filter(s => !s.apx).length, cur = slides[st().i];
+    if (V.minutes && main && cur && !cur.apx && (clock.t0 || clock.acc)) {
+      const due = V.minutes * 60000 * ((st().i + 1) / main), d = elapsed() - due;
+      p.style.display = 'block';
+      p.className = d > 60000 ? 'late' : d < -60000 ? 'early' : '';
+      p.textContent = Math.abs(d) < 60000 ? 'on pace' : Math.round(Math.abs(d) / 60000) + ' min ' + (d > 0 ? 'behind' : 'ahead');
+    } else p.style.display = 'none';
+  }
+  setInterval(tick, 1000);
+  let holdT = 0, held = false;
+  $('#clock').onpointerdown = () => { held = false; holdT = setTimeout(() => { held = true; clock = { t0: 0, acc: 0 }; saveClock(); tick(); toast('Clock reset'); }, 700); };
+  $('#clock').onpointerup = () => {
+    clearTimeout(holdT); if (held) return;
+    if (clock.t0) { clock.acc = elapsed(); clock.t0 = 0; } else clock.t0 = Date.now();
+    saveClock(); tick();
+  };
+
+  // ── top, preview, keys ───────────────────────────────────────────────
+  function paint() {
+    const s = st(), cur = slides[s.i] || {}, nxt = slides[s.i + 1];
+    $('#dot').classList.toggle('on', V.connected);
+    $('#gone').style.display = V.connected || slides.length ? 'none' : 'flex';
+    const main = slides.filter(x => !x.apx).length;
+    $('#page').textContent = slides.length ? (cur.apx ? 'A' : '') + (s.i + 1) + (cur.apx ? '' : '/' + main) : '–';
+    $('#title').textContent = slides.length ? cur.t || '' : V.connected ? '' : 'Waiting for the deck…';
+    const left = (s.n || 0) - (s.k || 0);
+    $('#nextl').textContent = left ? 'Next' : nxt ? 'Next slide' : 'End';
+    $('#dots').innerHTML = s.n ? Array.from({ length: s.n }, (_, k) => `<i class="${k < s.k ? 'on' : ''}"></i>`).join('') : '';
+    $('#nexts').textContent = left ? `click ${s.k + 1} of ${s.n}` : nxt ? '→ ' + nxt.t : '';
+    const sk = $('#skip'), after = slides[s.i + 2];
+    if (!sk.classList.contains('arm')) {
+      const blocked = !nxt || !after || nxt.ph || nxt.live;
+      sk.disabled = !!blocked;
+      sk.classList.toggle('safe', !blocked && !!nxt.opt);
+      sk.textContent = !nxt || !after ? 'Skip next slide' : blocked ? 'Next slide is a live one: not skippable' : (nxt.opt ? 'Safe to skip: ' : 'Skip: ') + nxt.t;
+    }
+    if (mirrorReady && mirror.contentWindow.__mirror && slides.length) { try { mirror.contentWindow.__mirror(s); } catch (e) {} }
+    tick(); paintPane();
+  }
+  mirror.onload = () => { mirrorReady = true; paint(); };
+  mirror.src = '/deck?mirror=1';
+
+  $('#next').onclick = () => cmd({ c: 'next' });
+  $('#back').onclick = () => cmd({ c: 'prev' });
+  $('#skip').onclick = e => { const s = st(), nxt = slides[s.i + 1]; if (!nxt) return; arm(e.currentTarget, 'Tap again to skip “' + nxt.t.slice(0, 28) + '”', () => cmd({ c: 'go', i: s.i + 2 })); };
+  addEventListener('keydown', e => {
+    if (/INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); cmd({ c: 'next' }); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); cmd({ c: 'prev' }); }
+  });
+
+  const MODES = { hl: 'Tap: highlight', laser: 'Tap: laser', off: 'Tap: off' };
+  $('#mode').onclick = () => { tapMode = { hl: 'laser', laser: 'off', off: 'hl' }[tapMode]; $('#mode').textContent = MODES[tapMode]; if (tapMode !== 'laser') cmd({ c: 'laser' }); };
+  const tapEl = $('#tap');
+  const frac = e => { const r = tapEl.getBoundingClientRect(); return { x: Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)), y: Math.max(0, Math.min(1, (e.clientY - r.top) / r.height)) }; };
+  let lastLaser = 0, down = false;
+  tapEl.onpointerdown = e => {
+    down = true; tapEl.setPointerCapture(e.pointerId);
+    const p = frac(e);
+    if (tapMode === 'hl') cmd({ c: 'hl', x: p.x, y: p.y });
+    else if (tapMode === 'laser') api('remote/cmd', { c: 'laser', x: p.x, y: p.y }).catch(() => {});
+  };
+  tapEl.onpointermove = e => {
+    if (!down || tapMode !== 'laser' || Date.now() - lastLaser < 70) return;
+    lastLaser = Date.now(); const p = frac(e);
+    api('remote/cmd', { c: 'laser', x: p.x, y: p.y }).catch(() => {});
+  };
+  tapEl.onpointerup = tapEl.onpointercancel = () => { down = false; };
+
+  // ── tabs ─────────────────────────────────────────────────────────────
+  $('#tabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; tab = b.dataset.t; [...$('#tabs').children].forEach(x => x.classList.toggle('on', x === b)); pane._sig = ''; paintPane(); pollRes(); pane.scrollTop = 0; };
+  function paintBadge() {
+    const n = res ? Object.values(res.results).filter(r => r.type === 'questions').reduce((a, r) => a + r.items.filter(q => !q.done && !q.hidden).length, 0) : 0;
+    $('#qn').style.display = n ? 'block' : 'none'; $('#qn').textContent = n;
+  }
+  const PANES = {};
+  function paintPane(soft) {
+    const html = PANES[tab]();
+    if (html == null) return;                       // pane manages its own DOM
+    const sig = tab + html;
+    if (pane._sig === sig) return;
+    if (soft && pane.querySelector('.arm')) return;  // do not redraw under a half-confirmed button
+    pane._sig = sig; pane.innerHTML = html;
+  }
+
+  PANES.notes = () => {
+    const cur = slides[st().i]; if (!cur) return '<div class="empty">Notes for the current slide appear here.</div>';
+    const lines = (cur.notes || '').split('\n'); let h = '', rest = [];
+    lines.forEach(l => {
+      if (/^▶/.test(l)) h += `<div class="opener">${esc(l.replace(/^▶\s*/, ''))}</div>`;
+      else if (/^[•\-*]\s/.test(l) && !rest.length) h += `<div class="pt"><span>${esc(l.replace(/^[•\-*]\s*/, ''))}</span></div>`;
+      else rest.push(l);
+    });
+    const r = rest.join('\n').trim();
+    return (h + (r ? `<div class="rest">${esc(r)}</div>` : '')) || '<div class="empty">No notes on this slide.</div>';
+  };
+
+  PANES.live = () => {
+    if (!info) return '<div class="empty">Loading…</div>';
+    const ph = V.phase, its = info.interactions || [];
+    const r = res && res.results[ph], cur = its.find(x => x.id === ph);
+    let h = `<div class="stat"><div><b>${V.online}</b><span>phones connected now</span></div><div><b>${res ? res.joined : 0}</b><span>joined in total</span></div></div>`;
+    h += `<div class="label">Phones are showing</div><div class="row"><button class="btn ${ph === 'wait' ? 'on' : ''}" data-ph="wait">Waiting screen</button>` +
+      its.map(x => `<button class="btn ${ph === x.id ? 'on' : ''}" data-ph="${esc(x.id)}">${esc(x.id)} <small>${x.type}</small></button>`).join('') +
+      (info.takehome ? `<button class="btn ${ph === 'takehome' ? 'on' : ''}" data-ph="takehome">Take-home</button>` : '') + '</div>';
+    if (cur && r) {
+      h += `<div class="label">${esc(cur.prompt || cur.id)} · ${r.n} in</div>`;
+      if (r.type === 'choice') {
+        const opts = (info.defs[ph] || {}).options || [];
+        h += opts.map((o, k) => `<div class="vrow"><span><span class="n">${r.counts[k]}</span>${esc(o)}</span><span class="pm"><button data-man="${k}" data-d="-1">−</button><span>${(r.manual || [])[k] ? '+' + r.manual[k] : ''}</span><button data-man="${k}" data-d="1">+</button></span></div>`).join('');
+        h += '<div class="empty" style="padding-top:2px">+ and − add a show of hands to the phone votes.</div>';
+      } else if (r.type === 'scale') h += `<div class="stat"><div><b>${r.median == null ? '–' : r.median}</b><span>median</span></div><div><b>${r.mean == null ? '–' : Math.round(r.mean * 10) / 10}</b><span>average</span></div></div>`;
+      else if (r.type === 'words') h += '<div>' + r.words.map(([w, c]) => `<span class="chipw">${esc(w)} · ${c}<button data-hide="${esc(w)}" aria-label="Hide">✕</button></span>`).join('') + (r.hidden || []).map(w => `<span class="chipw off">${esc(w)}<button data-show="${esc(w)}" aria-label="Show">↺</button></span>`).join('') + '</div>';
+      else if (r.type === 'swipe') h += r.cards.map((c, k) => `<div class="vrow"><span><span class="n">${c.yes + c.no ? Math.round((100 * c.yes) / (c.yes + c.no)) + '%' : '–'}</span>${esc((info.defs[ph].cards || [])[k] || 'Card ' + (k + 1))}</span></div>`).join('');
+      h += `<div class="row" style="margin-top:10px"><button class="btn warn" data-reset="${esc(ph)}">Clear these answers</button></div>`;
+    }
+    return h;
+  };
+
+  PANES.qa = () => {
+    if (!res) return '<div class="empty">Loading…</div>';
+    const sets = Object.entries(res.results).filter(([, r]) => r.type === 'questions');
+    if (!sets.length) return '<div class="empty">This deck has no questions interaction. Add one with type “questions” to collect questions from phones.</div>';
+    let h = '';
+    sets.forEach(([id, r]) => {
+      if (!r.items.length) h += '<div class="empty">No questions yet.</div>';
+      r.items.forEach(q => {
+        h += `<div class="q ${q.done ? 'done' : ''} ${shownQ === q.id ? 'shown' : ''}"><p><b>▲ ${q.votes}</b>${q.hidden ? '<s>' : ''}${esc(q.text)}${q.hidden ? '</s>' : ''}</p><div class="row">
+          <button data-q="${q.id}" data-set="${esc(id)}" data-act="show">${shownQ === q.id ? 'Take off screen' : 'Show on screen'}</button>
+          <button data-q="${q.id}" data-set="${esc(id)}" data-act="done">${q.done ? 'Not answered' : 'Answered'}</button>
+          <button data-q="${q.id}" data-set="${esc(id)}" data-act="hide">${q.hidden ? 'Unhide' : 'Hide'}</button></div></div>`;
+      });
+    });
+    return h;
+  };
+
+  PANES.find = () => {
+    if (!$('#findq')) { pane._sig = ''; pane.innerHTML = '<input type="search" id="findq" placeholder="Find a slide: title, text or notes" autocomplete="off"><div id="hits"></div>'; $('#findq').value = find; $('#findq').oninput = e => { find = e.target.value; hits(); }; }
+    hits(); return null;
+  };
+  function hits() {
+    const box = $('#hits'); if (!box) return;
+    const words = find.toLowerCase().split(/\s+/).filter(Boolean);
+    let list = slides.map((s, k) => ({ s, k, score: 0, snip: '' }));
+    if (words.length) {
+      list.forEach(h => {
+        const t = h.s.t.toLowerCase(), x = (h.s.x || '').toLowerCase(), n = (h.s.notes || '').toLowerCase();
+        if (!words.every(w => t.includes(w) || x.includes(w) || n.includes(w))) return;
+        words.forEach(w => { h.score += (t.includes(w) ? 3 : 0) + (x.includes(w) ? 2 : 0) + (n.includes(w) ? 1 : 0); });
+        const src = x.includes(words[0]) ? h.s.x : n.includes(words[0]) ? h.s.notes : '';
+        const at = src.toLowerCase().indexOf(words[0]);
+        h.snip = at >= 0 ? (at > 30 ? '…' : '') + src.slice(Math.max(0, at - 30), at + 70).replace(/\s+/g, ' ') : '';
+      });
+      list = list.filter(h => h.score).sort((a, b) => b.score - a.score);
+    }
+    const html = list.slice(0, 80).map(h => `<button class="hit" data-go="${h.k}"><b><i>${h.s.apx ? 'A' : ''}${h.k + 1}</i>${esc(h.s.t)}</b><span>${esc(h.snip || h.s.sec || '')}</span></button>`).join('') || '<div class="empty">Nothing matches.</div>';
+    if (box._sig !== html) { box._sig = html; box.innerHTML = html; }
+  }
+
+  PANES.more = () => {
+    const s = st();
+    return `<div class="label">Screen</div><div class="row">
+      <button class="btn ${s.qr ? 'on' : ''}" data-c="qr">${s.qr ? 'Hide join QR' : 'Show join QR'}</button>
+      <button class="btn ${s.blank === 'black' ? 'on' : ''}" data-blank="black">Blank</button>
+      <button class="btn ${s.blank === 'white' ? 'on' : ''}" data-blank="white">White</button>
+      <button class="btn" data-c="restart">Restart slide</button></div>
+      <div class="label">Highlight</div><div class="row">
+      <button class="btn ${s.dim ? 'on' : ''}" data-dim>Dim everything else</button>
+      <button class="btn" data-c="hlclear">Clear highlight</button></div>
+      <div class="label">Links</div>
+      <button class="btn wide" data-copy="join">Audience join link<small>copy</small></button>
+      <div style="height:6px"></div><button class="btn wide" data-copy="remote">This remote<small>copy</small></button>
+      <div class="label">After the talk</div><div class="row">
+      <a class="btn" href="/api/export" download style="text-decoration:none;color:inherit">Download results</a>
+      <button class="btn warn" data-newsession>New session</button></div>
+      <div class="label">If something looks stuck</div><div class="row">
+      <button class="btn" data-c="ping">Test connection</button><button class="btn" data-c="reload">Reload deck</button></div>
+      <div class="empty">Clock: tap to pause, hold to reset. “New session” clears every answer and sends phones back to the waiting screen.</div>`;
+  };
+
+  pane.onclick = async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const d = b.dataset;
+    if (d.go != null) { cmd({ c: 'go', i: +d.go }); toast('Jumped to ' + (+d.go + 1)); }
+    else if (d.ph) { await api('phase', { phase: d.ph }).catch(() => toast('Could not switch')); pollRes(); }
+    else if (d.man != null) {
+      const ph = V.phase, n = (info.defs[ph].options || []).length, cur = ((res.results[ph] || {}).manual || []).slice();
+      while (cur.length < n) cur.push(0);
+      cur[+d.man] = Math.max(0, cur[+d.man] + +d.d);
+      await api('manual', { id: ph, counts: cur }).catch(() => {}); pollRes();
+    }
+    else if (d.hide) { await api('moderate', { id: V.phase, word: d.hide, hidden: true }); pollRes(); }
+    else if (d.show) { await api('moderate', { id: V.phase, word: d.show, hidden: false }); pollRes(); }
+    else if (d.reset) arm(b, 'Tap again to clear', async () => { await api('reset', { id: d.reset }); pollRes(); toast('Cleared'); });
+    else if (d.newsession != null) arm(b, 'Tap again: clears everything', async () => { await api('reset', {}); pollRes(); toast('New session'); });
+    else if (d.act) {
+      const q = res.results[d.set].items.find(x => x.id === d.q); if (!q) return;
+      if (d.act === 'show') { shownQ = shownQ === q.id ? '' : q.id; cmd({ c: 'ask', text: shownQ ? q.text : '' }); pane._sig = ''; paintPane(); }
+      else { await api('moderate', { id: d.set, qid: q.id, [d.act === 'done' ? 'done' : 'hidden']: !(d.act === 'done' ? q.done : q.hidden) }); pollRes(); }
+    }
+    else if (d.c === 'qr') cmd({ c: 'qr' });
+    else if (d.c) cmd({ c: d.c });
+    else if (d.blank) cmd({ c: 'blank', mode: st().blank === d.blank ? '' : d.blank });
+    else if (d.dim != null) cmd({ c: 'dim', on: !st().dim });
+    else if (d.copy) { try { await navigator.clipboard.writeText(info[d.copy]); toast('Copied'); } catch (err) { prompt('Copy this link', info[d.copy]); } }
+  };
+
+  async function loadInfo() {
+    try {
+      info = await api('info');
+      info.defs = {};
+      (info.interactions || []).forEach(d => { info.defs[d.id] = d; });
+      document.title = 'Remote · ' + (info.title || 'deck');
+      paintPane();
+    } catch (e) { setTimeout(loadInfo, 3000); }
+  }
+
+  loadInfo(); kick(); wake();
+})();
+</script>
+</body>
+</html>

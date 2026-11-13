@@ -1,0 +1,5 @@
+.room/
+shots/
+*.pdf
+.git/
+__pycache__/
